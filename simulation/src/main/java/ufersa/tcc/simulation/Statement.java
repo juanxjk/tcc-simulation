@@ -1,14 +1,14 @@
 package ufersa.tcc.simulation;
 
 public class Statement {
-	public float ti;
-	public float tf;
-	public float dX;
-	public float dY;
-	public float dV;
-	public float dV_;
+	public double ti;
+	public double tf;
+	public double dX;
+	public double dY;
+	public double dV;
+	public double dV_;
 
-	public Statement(float ti, float tf, float dX, float dY, float dV, float dV_) {
+	public Statement(double ti, double tf, double dX, double dY, double dV, double dV_) {
 		this.ti = ti;
 		this.tf = tf;
 		this.dX = dX;
@@ -17,7 +17,7 @@ public class Statement {
 		this.dV_ = dV_;
 	}
 
-	public boolean isActive(float t_) {
+	public boolean isActive(double t_) {
 		if (t_ >= this.ti && t_ <= tf)
 			return true;
 		return false;

@@ -23,7 +23,7 @@ public class Simulation extends PApplet {
 
 	public void setup() {
 		b = new Body(this, width / 2, height / 2, 100, 0, 0);
-		r1 = new Rocket(this, width / 2, height / 2 + 200, 10, 20, 0);
+		r1 = new Rocket(new Body(this, width / 2, height / 2 + 200, 10, 20, 0));
 		world1 = new World();
 		world1.addBody(this, b);
 	}
