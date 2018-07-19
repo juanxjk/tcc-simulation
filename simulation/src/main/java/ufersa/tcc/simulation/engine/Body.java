@@ -1,12 +1,16 @@
 package ufersa.tcc.simulation.engine;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import processing.core.PApplet;
-import java.lang.Math;
 
 public class Body {
 	public double x, y, mass;
 	public double vx, vy;
 	private PApplet screen;
+	private int[] rgb = { 255, 255, 255 };
+	private String bodyName = "-";
 	public final static double G = 750;
 
 	public Body(PApplet screen, double x, double y, double mass, double vx, double vy) {
@@ -21,6 +25,10 @@ public class Body {
 	protected Body(Body body) {
 		this(body.screen, body.x, body.y, body.mass, body.vx, body.vy);
 
+	}
+
+	public double calcDistance(Body b) {
+		return Math.sqrt(Math.pow(this.x - b.x, 2) + Math.pow(this.y - b.y, 2));
 	}
 
 	public void interact(Body b, double t) {
@@ -38,7 +46,7 @@ public class Body {
 	}
 
 	public void draw() {
-		screen.fill(255, 255, 0, 200);
+		screen.fill(rgb[0], rgb[1], rgb[2], 200);
 		screen.ellipse((float) this.x, (float) this.y, (float) this.mass, (float) this.mass);
 	}
 
@@ -46,4 +54,28 @@ public class Body {
 	public String toString() {
 		return "VelX" + this.vx;
 	}
+
+	public void showInfo(World w, double x, double y) {
+		int line;
+		List<String> strings = new ArrayList<>();
+		strings.add(this.getClass().getName() + " Info: ");
+		strings.add(String.format("Vel (%f, %f)", this.vx, this.vy));
+		for (Body b : w.getBodies()) {
+			strings.add(String.format("Distance to %s: (%f) ", b.getName(), this.calcDistance(b)));
+		}
+		String t = "";
+		for (String s : strings) {
+			t += "\n" + s;
+		}
+		screen.text(t, (float) x, (float) y);
+	}
+
+	public void setName(String name) {
+		this.bodyName = name;
+	}
+
+	public String getName() {
+		return this.bodyName;
+	}
+
 }

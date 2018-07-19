@@ -26,4 +26,5 @@ public class Rocket extends Body {
 		this.script.process(this, dt);
 		this.draw();
 	}
+
 }
