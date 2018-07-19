@@ -10,7 +10,7 @@ public class Body {
 	public double vx, vy;
 	private PApplet screen;
 	private int[] rgb = { 255, 255, 255 };
-	private String bodyName = "-";
+	private String bodyName = "Não identificado";
 	public final static double G = 750;
 
 	public Body(PApplet screen, double x, double y, double mass, double vx, double vy) {
@@ -27,7 +27,7 @@ public class Body {
 
 	}
 
-	public double calcDistance(Body b) {
+	protected double calcDistance(Body b) {
 		return Math.sqrt(Math.pow(this.x - b.x, 2) + Math.pow(this.y - b.y, 2));
 	}
 
@@ -58,10 +58,13 @@ public class Body {
 	public void showInfo(World w, double x, double y) {
 		int line;
 		List<String> strings = new ArrayList<>();
-		strings.add(this.getClass().getName() + " Info: ");
+		strings.add(this.getName() + " Info: ");
 		strings.add(String.format("Vel (%f, %f)", this.vx, this.vy));
+		strings.add(String.format("Vel: %f", Math.sqrt(Math.pow(this.vx, 2) + Math.pow(this.vy, 2))));
 		for (Body b : w.getBodies()) {
-			strings.add(String.format("Distance to %s: (%f) ", b.getName(), this.calcDistance(b)));
+			if (!this.equals(b)) {
+				strings.add(String.format("Distance to %s: (%f) ", b.getName(), this.calcDistance(b)));
+			}
 		}
 		String t = "";
 		for (String s : strings) {
@@ -76,6 +79,12 @@ public class Body {
 
 	public String getName() {
 		return this.bodyName;
+	}
+
+	public void setPercentageVelocity(double percentage) {
+		double _percent = percentage / 100;
+		this.vx *= _percent;
+		this.vy *= _percent;
 	}
 
 }

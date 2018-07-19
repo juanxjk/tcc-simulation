@@ -14,4 +14,13 @@ public class World {
 	public List<Body> getBodies() {
 		return bodies;
 	}
+
+	public void draw() {
+		bodies.forEach(e -> e.draw());
+	}
+
+	public void simulate(float dt) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -24,7 +24,10 @@ public class Rocket extends Body {
 			this.interact(body, dt);
 		}
 		this.script.process(this, dt);
-		this.draw();
 	}
+
+	
+
+	
 
 }
