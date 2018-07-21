@@ -14,10 +14,13 @@ public class Simulation extends PApplet {
 
 	public void settings() {
 		size(800, 600);
-
 	}
 
-	private float dt = 0.1f;
+	public static double screenScaleX = 7.5e-4; // Escala das órbitas em X
+	public static double screenScaleY = 7.5e-4; // Escala das órbitas em Y
+	public static double screenObjectScale = 1e-2; // Escala dos objetos
+
+	private float dt = 1f; // [s]
 	private Body earth;
 	private Satellite moon;
 	private Rocket spacecraft;
@@ -89,7 +92,6 @@ public class Simulation extends PApplet {
 	private boolean showMoonInfo = false;
 
 	private void showInfo() {
-		// TODO Auto-generated method stub
 		if (showEarthInfo) {
 			earth.showInfo(world, 10f, 10f);
 		}
@@ -119,12 +121,29 @@ public class Simulation extends PApplet {
 			showMoonInfo = !showMoonInfo;
 		}
 
-		if (key == '+') {
+		if (key == '7') {
+			spacecraft.setPercentageVelocity(90);
+		}
+
+		if (key == '8') {
 			spacecraft.setPercentageVelocity(110);
 		}
 
+		if (key == '9') {
+			screenObjectScale *= 1.1;
+		}
+
+		if (key == '6') {
+			screenObjectScale *= .9;
+		}
+
 		if (key == '-') {
-			spacecraft.setPercentageVelocity(90);
+			if (dt > 1)
+				dt -= 1;
+		}
+
+		if (key == '+') {
+			dt += 1;
 		}
 
 		if (key == 'r')
