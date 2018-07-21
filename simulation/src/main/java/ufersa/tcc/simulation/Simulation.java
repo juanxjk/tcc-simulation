@@ -23,23 +23,43 @@ public class Simulation extends PApplet {
 	private Rocket spacecraft;
 	private World world;
 
-	double initialRocketVx = 9.5;
-	double initialRocketVy = 0;
-
 	public void setup() {
 		t = 0;
-
-		// TERRA
-		earth = new Body(this, width / 2, height / 2, 100, 0, 0);
+		PApplet screen = this;
+		// --- TERRA ---
+		double earth_center_x = 0; // [km] Posição em referência ao centro da Terra
+		double earth_center_y = 0; // [km] Posição em referência ao centro da Terra
+		double earth_radiusLengh = 6371; // [km] Raio da Terra
+		double earth_mass = 5.972e24; // [kg] Massa da Terra
+		double earth_vx = 0; // [m/s] Velocidade tangencial da Terra em X
+		double earth_vy = 0; // [m/s] Velocidade tangencial da Terra em Y
+		earth = new Body(screen, earth_center_x, earth_center_y, earth_radiusLengh, earth_mass, earth_vx, earth_vy);
 		earth.setName("Terra");
 
-		// LUA
-		Body moonBody = new Body(this, width / 2 + 250, height / 2, 25, 20, 50);
-		moon = new Satellite(earth, moonBody, 2.75e2, 1e-1);
+		// --- LUA ---
+		double moon_distanceToEarth = 3.844e5; // [km] Distância da Lua em referência à Terra
+		double moon_x = earth.x + earth_radiusLengh + moon_distanceToEarth; // [km] Posição em referência ao centro da
+																			// Terra
+		double moon_y = earth.y; // [km] Posição em referência ao centro da Terra
+		double moon_radiusSize = 1737; // [km] Raio da Lua
+		double moon_mass = 7.349e22; // [kg] Massa da Lua
+		double moon_vx = 0; // [m/s] Velocidade tangencial da Lua em X
+		double moon_vy = 3594.24; // [m/s] Velocidade tangencial da Lua em Y
+		Body moonBody = new Body(screen, earth.x + moon_distanceToEarth, moon_y, moon_radiusSize, moon_mass, moon_vx,
+				moon_vy);
+		moon = new Satellite(earth, moonBody, moon_distanceToEarth, 6.3);
 		moon.setName("Lua");
 
-		// FOGUETE
-		spacecraft = new Rocket(new Body(this, width / 2, height / 2 + 200, 10, initialRocketVx, initialRocketVy));
+		// --- FOGUETE ---
+		double spacecraft_radiusDistance = 35786; // Distância da Saturn V em referência à Terra - km
+		double spacecraft_x = earth_center_x + earth_radiusLengh + spacecraft_radiusDistance;
+		double spacecraft_y = earth_center_y;
+		double spacecraft_radiusSize = 10 / screenObjectScale; // Tamanho do foguete (ignorando o escalonamento de tela)
+		double spacecraft_mass = 2.97e6; // [kg] Massa da Saturn V
+		double spacecraft_vx = 0; // [m/s] Velocidade tangencial em X
+		double spacecraft_vy = 9.5; // [m/s] Velocidade tangencial em Y
+		spacecraft = new Rocket(new Body(screen, spacecraft_x, spacecraft_y, spacecraft_radiusSize, spacecraft_mass,
+				spacecraft_vx, spacecraft_vy));
 		spacecraft.setName("Foguete");
 		spacecraft.addStatement(new Statement(74f, 76f, 0f, 0f, 10f, 0f));
 
