@@ -1,34 +1,51 @@
 package ufersa.tcc.simulation.engine;
 
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import processing.core.PApplet;
 
 public class Body {
-	public double x, y, mass;
-	public double vx, vy;
+	public double x, y; // [km]
+	public double mass; // [kg]
+	public double vx, vy; // [km/s]
+	public double radius = 10; // [km] Tamanho padrão do objeto
 	private PApplet screen;
 	private int[] rgb = { 255, 255, 255 };
 	private String bodyName = "Não identificado";
-	public final static double G = 750;
 
-	public Body(PApplet screen, double x, double y, double mass, double vx, double vy) {
+	public final static double G = 6.67408e-11; // m^3 kg^-1 s^-2
+
+	/**
+	 * @param screen
+	 *            Tela de display.
+	 * @param x
+	 *            posição x.
+	 * @param y
+	 *            posição y.
+	 * @param radius
+	 *            Tamanho do raio do circulo.
+	 */
+	public Body(PApplet screen, double x, double y, double radius, double mass, double vx, double vy) {
 		this.screen = screen;
-		this.x = x;
-		this.y = y;
-		this.mass = mass;
-		this.vx = vx;
-		this.vy = vy;
+		this.x = x; // [km]
+		this.y = y; // [km]
+		this.radius = radius; // [km]
+		this.mass = mass; // [kg]
+		this.vx = vx; // [m/s]
+		this.vy = vy; // [m/s]
 	}
 
 	protected Body(Body body) {
-		this(body.screen, body.x, body.y, body.mass, body.vx, body.vy);
+		this(body.screen, body.x, body.y, body.radius, body.mass, body.vx, body.vy);
 
 	}
 
 	protected double calcDistance(Body b) {
-		return Math.sqrt(Math.pow(this.x - b.x, 2) + Math.pow(this.y - b.y, 2));
+		return sqrt(pow(this.x - b.x, 2) + pow(this.y - b.y, 2));
 	}
 
 	public void interact(Body b, double t) {
@@ -71,6 +88,10 @@ public class Body {
 			t += "\n" + s;
 		}
 		screen.text(t, (float) x, (float) y);
+	}
+
+	public double getSpeed() {
+		return sqrt(pow(this.vx, 2) + pow(this.vy, 2));
 	}
 
 	public void setName(String name) {
