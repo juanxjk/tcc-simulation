@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import processing.core.PApplet;
+import ufersa.tcc.simulation.Simulation;
 
 public class Body {
 	public double x, y; // [km]
@@ -63,8 +64,12 @@ public class Body {
 	}
 
 	public void draw() {
+		screen.translate(screen.width / 2, screen.height / 2);
 		screen.fill(rgb[0], rgb[1], rgb[2], 200);
-		screen.ellipse((float) this.x, (float) this.y, (float) this.mass, (float) this.mass);
+		screen.ellipse((float) (Simulation.screenScaleX * this.x), (float) (Simulation.screenScaleY * this.y),
+				(float) (this.radius * Simulation.screenObjectScale),
+				(float) (this.radius * Simulation.screenObjectScale));
+		screen.translate(-screen.width / 2, -screen.height / 2);
 	}
 
 	@Override
