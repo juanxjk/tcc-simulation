@@ -58,7 +58,7 @@ public class Simulation extends PApplet {
 		double moon_vx = 0; // [m/s] Velocidade tangencial da Lua em X
 		double moon_vy = Math.sqrt((Body.G * earth_mass) / moon_distanceToEarth); // [m/s] Velocidade tangencial da Lua
 																					// em Y
-		double angular_speed = 2 * PI / (27.3 * 24 * 60 * 60); // [rad/s] 27,3 horas período
+		double angular_speed = 2 * PI / (27.322 * 24 * 60 * 60); // [rad/s] 27,3 horas período
 
 		moon = new Satellite(earth, new Body(screen, moon_x, moon_y, moon_radiusSize, moon_mass, moon_vx, moon_vy),
 				moon_distanceToEarth, angular_speed);
