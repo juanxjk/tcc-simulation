@@ -86,7 +86,7 @@ public class Simulation extends PApplet {
 		background(0);
 		text("Total time: " + time.getTotalTime(), 50, 20);
 		text("Duration time: " + time.toString(), 50, 35);
-		text("dt: " + time.dt + " [s]", 50, 50);
+		text("dt: " + Time.formatHMSM(time.dt) + " [s]", 50, 50);
 		if (!pause) {
 			world.simulate(time.dt);
 			time.step();
