@@ -19,7 +19,7 @@ public class Rocket extends Body {
 		this.script.addStatement(s.ti, s.tf, s.dX, s.dY, s.dV, s.dV_);
 	}
 
-	public void simulate(World w, float dt) {
+	public void simulate(World w, double dt) {
 		for (Body body : w.getBodies()) {
 			this.interact(body, dt);
 		}
