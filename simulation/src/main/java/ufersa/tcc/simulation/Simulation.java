@@ -54,17 +54,21 @@ public class Simulation extends PApplet {
 																			// Terra
 		double moon_y = earth.y; // [km] Posição em referência ao centro da Terra
 		double moon_radiusSize = 1_737; // [km] Raio da Lua
-		double angular_speed = 6.3; // [rad/s] 27,3 horas período
 		double moon_mass = 7.349e22; // [kg] Massa da Lua
 		double moon_vx = 0; // [m/s] Velocidade tangencial da Lua em X
-		double moon_vy = 3594.24; // [m/s] Velocidade tangencial da Lua em Y
-		moon = new Body(screen, moon_x, moon_y, moon_radiusSize, moon_mass, moon_vx, moon_vy);
-		moon = new Satellite(moonBody, moon_distanceToEarth, angular_speed);
+		double moon_vy = Math.sqrt((Body.G * earth_mass) / moon_distanceToEarth); // [m/s] Velocidade tangencial da Lua
+																					// em Y
+		double angular_speed = 2 * PI / (27.3 * 24 * 60 * 60); // [rad/s] 27,3 horas período
+
+		moon = new Satellite(earth, new Body(screen, moon_x, moon_y, moon_radiusSize, moon_mass, moon_vx, moon_vy),
+				moon_distanceToEarth, angular_speed);
 		moon.setName("Lua");
 
 		// --- FOGUETE ---
-		double spacecraft_radiusDistance = 35786; // Distância da Saturn V em referência à Terra - km
-		double spacecraft_x = earth_center_x + earth_radiusLengh + spacecraft_radiusDistance;
+		double spacecraft_radiusDistance = 35786; // [km] Orbita geoestacionária
+		double spacecraft_x = earth_center_x + earth_radiusLengh + spacecraft_radiusDistance; // [km] Distância da
+																								// Saturn V em
+																								// referência à Terra
 		double spacecraft_y = earth_center_y;
 		double spacecraft_radius = 10 / screenObjectScale; // Tamanho do foguete (ignorando o escalonamento de tela)
 		double spacecraft_mass = 2.97e6; // [kg] Massa da Saturn V
