@@ -60,8 +60,8 @@ public class Body {
 		final double accelY = force * deltaY / (dist * this.mass); // [m/s^2]
 		this.vx += accelX * t; // [m/s]
 		this.vy += accelY * t; // [m/s]
-		this.x += vx * 1e-3 * t; // [m]->[km]
-		this.y += vy * 1e-3 * t; // [m]->[km]
+		//this.x += vx * 1e-3 * t; // [m]->[km]
+		//this.y += vy * 1e-3 * t; // [m]->[km]
 	}
 
 	public void draw() {

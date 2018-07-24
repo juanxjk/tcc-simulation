@@ -23,6 +23,10 @@ public class Rocket extends Body {
 		for (Body body : w.getBodies()) {
 			this.interact(body, dt);
 		}
+
+		this.x += vx * 1e-3 * dt; // [m]->[km]
+		this.y += vy * 1e-3 * dt; // [m]->[km]
+
 		this.script.process(this, dt);
 	}
 

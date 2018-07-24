@@ -65,19 +65,19 @@ public class Simulation extends PApplet {
 		moon.setName("Lua");
 
 		// --- FOGUETE ---
-		double spacecraft_radiusDistance = 35786; // [km] Orbita geoestacionária
-		double spacecraft_x = earth_center_x + earth_radiusLengh + spacecraft_radiusDistance; // [km] Distância da
+		//double spacecraft_radiusDistance = 35786; // [km] Orbita geoestacionária
+		double spacecraft_x = 42164;/*earth_center_x + earth_radiusLengh + spacecraft_radiusDistance; // [km] Distância da
 																								// Saturn V em
-																								// referência à Terra
+																								// referência à Terra*/
 		double spacecraft_y = earth_center_y;
 		double spacecraft_radius = 10 / screenObjectScale; // Tamanho do foguete (ignorando o escalonamento de tela)
 		double spacecraft_mass = 2.97e6; // [kg] Massa da Saturn V
 		double spacecraft_vx = 0; // [m/s] Velocidade tangencial em X
-		double spacecraft_vy = 9.5; // [m/s] Velocidade tangencial em Y
+		double spacecraft_vy = -3074.6; // [m/s] Velocidade tangencial em Y
 		spacecraft = new Rocket(new Body(screen, spacecraft_x, spacecraft_y, spacecraft_radius, spacecraft_mass,
 				spacecraft_vx, spacecraft_vy));
 		spacecraft.setName("Foguete");
-		spacecraft.addStatement(new Statement(74f, 76f, 0f, 0f, 10f, 0f));
+		//spacecraft.addStatement(new Statement(74f, 76f, 0f, 0f, 10f, 0f));
 
 		world = new World();
 		// world.addBody(spacecraft);
