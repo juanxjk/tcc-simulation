@@ -80,12 +80,14 @@ public class Body {
 	public void showInfo(World w, double x, double y) {
 		int line;
 		List<String> strings = new ArrayList<>();
-		strings.add(this.getName() + " Info: ");
-		strings.add(String.format("Vel (%f, %f)", this.vx, this.vy));
-		strings.add(String.format("Vel: %f", Math.sqrt(Math.pow(this.vx, 2) + Math.pow(this.vy, 2))));
+		strings.add(this.getName());
+		strings.add(String.format("Position: (%g, %g) [km]", this.x, this.y));
+		strings.add(String.format("Mass: %g [km]", this.mass));
+		strings.add(String.format("Radius: %g [km]", this.radius));
+		strings.add(String.format("Speed: %g (%.3f, %.3f) [m/s]", this.getSpeed(), this.vx, this.vy));
 		for (Body b : w.getBodies()) {
 			if (!this.equals(b)) {
-				strings.add(String.format("Distance to %s: (%f) ", b.getName(), this.calcDistance(b)));
+				strings.add(String.format("Distance to %s: %g [km] ", b.getName(), this.calcDistance(b)));
 			}
 		}
 		String t = "";
