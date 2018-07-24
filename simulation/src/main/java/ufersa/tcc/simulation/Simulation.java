@@ -26,6 +26,7 @@ public class Simulation extends PApplet {
 	public static double screenObjectScale = 1e-2; // Escala dos objetos
 
 	static Time time;
+	private boolean pause = false;
 
 	private Body earth;
 	private Satellite moon;
@@ -100,6 +101,7 @@ public class Simulation extends PApplet {
 		showInfo();
 	}
 
+	private boolean showHelpInfo = false;
 	private boolean showEarthInfo = false;
 	private boolean showRocketInfo = false;
 	private boolean showMoonInfo = false;
@@ -114,6 +116,23 @@ public class Simulation extends PApplet {
 		}
 		if (showMoonInfo) {
 			moon.showInfo(world, width / 2, 50f);
+		}
+
+		if (showHelpInfo) {
+
+			showHelp();
+		}
+	}
+
+	private void showHelp() {
+		List<String> items = new ArrayList<String>();
+		double dString = 15;
+		items.add("[p] - Pausar");
+		items.add("[-] [+] Alterar velocidade do tempo (alterar dt)");
+		items.add("[7] [8] Alterar velocidade do foguete");
+		int index = 1;
+		for (String s : items) {
+			text(s, (float) width - 300f, (float) (height - dString * index++));
 		}
 
 	}
@@ -156,6 +175,14 @@ public class Simulation extends PApplet {
 
 		if (key == '+') {
 			Time.dt = Time.dt * 1.1;
+		}
+
+		if (key == 'p') {
+			this.pause = !this.pause;
+		}
+
+		if (key == 'h') {
+			showHelpInfo = !showHelpInfo;
 		}
 
 		if (key == 'r')
