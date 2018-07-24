@@ -19,8 +19,4 @@ public class World {
 		bodies.forEach(e -> e.draw());
 	}
 
-	public void simulate(float dt) {
-		// TODO Auto-generated method stub
-		
-	}
 }

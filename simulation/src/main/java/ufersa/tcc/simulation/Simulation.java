@@ -12,7 +12,6 @@ import ufersa.tcc.simulation.engine.time.Time;
 
 public class Simulation extends PApplet {
 	public static void main(String[] args) {
-
 		PApplet.main("ufersa.tcc.simulation.Simulation");
 	}
 
@@ -38,6 +37,7 @@ public class Simulation extends PApplet {
 		double dt = 1f; // [s] intervalo de tempo para cada iteração
 		time = new Time(dt);
 		PApplet screen = this;
+
 		// --- TERRA ---
 		double earth_center_x = 0; // [km] Posição em referência ao centro da Terra
 		double earth_center_y = 0; // [km] Posição em referência ao centro da Terra
@@ -107,6 +107,7 @@ public class Simulation extends PApplet {
 	private boolean showMoonInfo = false;
 
 	private void showInfo() {
+
 		if (showEarthInfo) {
 			earth.showInfo(world, 10f, 50f);
 		}

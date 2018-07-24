@@ -14,6 +14,7 @@ public class Body {
 	public double mass; // [kg]
 	public double vx, vy; // [km/s]
 	public double radius = 10; // [km] Tamanho padrão do objeto
+
 	private PApplet screen;
 	private int[] rgb = { 255, 255, 255 };
 	private String bodyName = "Não identificado";
