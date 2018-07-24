@@ -5,6 +5,7 @@ import ufersa.tcc.simulation.engine.Body;
 import ufersa.tcc.simulation.engine.Rocket;
 import ufersa.tcc.simulation.engine.Satellite;
 import ufersa.tcc.simulation.engine.World;
+import ufersa.tcc.simulation.engine.time.Time;
 
 public class Simulation extends PApplet {
 	public static void main(String[] args) {
@@ -20,14 +21,16 @@ public class Simulation extends PApplet {
 	public static double screenScaleY = 7.5e-4; // Escala das órbitas em Y
 	public static double screenObjectScale = 1e-2; // Escala dos objetos
 
-	private float dt = 1f; // [s]
+	static Time time;
+
 	private Body earth;
 	private Satellite moon;
 	private Rocket spacecraft;
 	private World world;
 
 	public void setup() {
-		t = 0;
+		double dt = 1f; // [s] intervalo de tempo para cada iteração
+		time = new Time(dt);
 		PApplet screen = this;
 		// --- TERRA ---
 		double earth_center_x = 0; // [km] Posição em referência ao centro da Terra
@@ -76,7 +79,13 @@ public class Simulation extends PApplet {
 
 	public void draw() {
 		background(0);
-		text(t, 50, 50);
+		text("Total time: " + time.getTotalTime(), 50, 20);
+		text("Duration time: " + time.toString(), 50, 35);
+		text("dt: " + time.dt + " [s]", 50, 50);
+		if (!pause) {
+			world.simulate(time.dt);
+			time.step();
+		}
 		world.draw();
 		world.simulate(dt);
 		// r1.interact(b, dt);
@@ -138,12 +147,11 @@ public class Simulation extends PApplet {
 		}
 
 		if (key == '-') {
-			if (dt > 1)
-				dt -= 1;
+			Time.dt = Time.dt * 0.9;
 		}
 
 		if (key == '+') {
-			dt += 1;
+			Time.dt = Time.dt * 1.1;
 		}
 
 		if (key == 'r')

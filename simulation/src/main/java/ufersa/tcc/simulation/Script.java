@@ -27,7 +27,7 @@ public class Script {
 		double vy_ = vx;
 
 		for (Statement s : statements) {
-			if (!s.isActive(Simulation.t))
+			if (!s.isActive(Simulation.time.getTotalTime()))
 				continue;
 			double dvx = s.dX + (vx * s.dV + vx_ * s.dV_);
 			double dvy = s.dY + (vy * s.dV + vy_ * s.dV_);
