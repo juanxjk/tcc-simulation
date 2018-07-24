@@ -50,8 +50,8 @@ public class Body {
 	}
 
 	public void interact(Body b, double t) {
-		final double deltaX = (b.x - this.x) * 1e3; // [m]
-		final double deltaY = (b.y - this.y) * 1e3; // [m]
+		final double deltaX = (b.x - this.x) * 1e3; // [km]->[m]
+		final double deltaY = (b.y - this.y) * 1e3; // [km]->[m]
 		final double dist2 = pow(deltaX, 2) + pow(deltaY, 2); // [m^2]
 		final double dist = sqrt(dist2); // [m]
 		final double force = G * b.mass * this.mass / dist2; // [kg] * [m/s^2]
@@ -59,8 +59,8 @@ public class Body {
 		final double accelY = force * deltaY / (dist * this.mass); // [m/s^2]
 		this.vx += accelX * t; // [m/s]
 		this.vy += accelY * t; // [m/s]
-		this.x += vx * 1e-3 * t; // [km]
-		this.y += vy * 1e-3 * t; // [km]
+		this.x += vx * 1e-3 * t; // [m]->[km]
+		this.y += vy * 1e-3 * t; // [m]->[km]
 	}
 
 	public void draw() {
