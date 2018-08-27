@@ -46,7 +46,7 @@ public class Body {
 
 	}
 
-	protected double calcDistance(Body b) {
+	public double calcDistance(Body b) {
 		return sqrt(pow(this.x - b.x, 2) + pow(this.y - b.y, 2));
 	}
 
