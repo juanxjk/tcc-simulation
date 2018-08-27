@@ -19,12 +19,13 @@ public class Simulation extends PApplet {
 	public void settings() {
 		size(800, 600);
 	}
-
-	public static double screenScaleX = 7.5e-4; // Escala das órbitas em X
-	public static double screenScaleY = 7.5e-4; // Escala das órbitas em Y
-	public static double screenObjectScale = 1e-2; // Escala dos objetos
+	
+	public static double screenScale = 7.75e-7; // Escala da posição dos objetos
+	public static double screenObjectScale = 1e-5; // Escala dos objetos
 
 	static Time time;
+
+
 	private boolean pause = false;
 
 	private Body earth;
@@ -39,9 +40,9 @@ public class Simulation extends PApplet {
 		PApplet screen = this;
 
 		// --- TERRA ---
-		double earth_center_x = 0; // [km] Posição em referência ao centro da Terra
-		double earth_center_y = 0; // [km] Posição em referência ao centro da Terra
-		double earth_radiusLengh = 6_371; // [km] Raio da Terra
+		double earth_center_x = 0 * 1e3; // [km]->[m] Posição em referência ao centro da Terra
+		double earth_center_y = 0 * 1e3; // [km]->[m] Posição em referência ao centro da Terra
+		double earth_radiusLengh = 6_371 * 1e3; // [km]->[m] Raio da Terra
 		double earth_mass = 5.972e24; // [kg] Massa da Terra
 		double earth_vx = 0; // [m/s] Velocidade tangencial da Terra em X
 		double earth_vy = 0; // [m/s] Velocidade tangencial da Terra em Y
@@ -49,11 +50,11 @@ public class Simulation extends PApplet {
 		earth.setName("Terra");
 
 		// --- LUA ---
-		double moon_distanceToEarth = 384_000; // [km] Distância da Lua em referência à Terra
-		double moon_x = earth.x + earth_radiusLengh + moon_distanceToEarth; // [km] Posição em referência ao centro da
+		double moon_distanceToEarth = 384_000 * 1e3; // [km]->[m] Distância da Lua em referência à Terra
+		double moon_x = earth.x + earth_radiusLengh + moon_distanceToEarth; // [m] Posição em referência ao centro da
 																			// Terra
-		double moon_y = earth.y; // [km] Posição em referência ao centro da Terra
-		double moon_radiusSize = 1_737; // [km] Raio da Lua
+		double moon_y = earth.y; // [m] Posição em referência ao centro da Terra
+		double moon_radiusSize = 1_737 * 1e3; // [km]->[m] Raio da Lua
 		double moon_mass = 7.349e22; // [kg] Massa da Lua
 		double moon_vx = 0; // [m/s] Velocidade tangencial da Lua em X
 		double moon_vy = Math.sqrt((Body.G * earth_mass) / moon_distanceToEarth); // [m/s] Velocidade tangencial da Lua
@@ -65,12 +66,12 @@ public class Simulation extends PApplet {
 		moon.setName("Lua");
 
 		// --- FOGUETE ---
-		//double spacecraft_radiusDistance = 35786; // [km] Orbita geoestacionária
-		double spacecraft_x = 42164;/*earth_center_x + earth_radiusLengh + spacecraft_radiusDistance; // [km] Distância da
+		//double spacecraft_radiusDistance = 35786 * 1e3; // [km]->[m] Orbita geoestacionária
+		double spacecraft_x = 42_164 * 1e3;/*earth_center_x + earth_radiusLengh + spacecraft_radiusDistance; // [km]->[m] Distância da
 																								// Saturn V em
 																								// referência à Terra*/
-		double spacecraft_y = earth_center_y;
-		double spacecraft_radius = 10 / screenObjectScale; // Tamanho do foguete (ignorando o escalonamento de tela)
+		double spacecraft_y = earth_center_y; // [m]
+		double spacecraft_radius = 1000 * 1e3; // [km]->[m] Tamanho do foguete (ignorando o escalonamento de tela)
 		double spacecraft_mass = 2.97e6; // [kg] Massa da Saturn V
 		double spacecraft_vx = 0; // [m/s] Velocidade tangencial em X
 		double spacecraft_vy = -3074.6; // [m/s] Velocidade tangencial em Y

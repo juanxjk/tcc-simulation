@@ -10,10 +10,10 @@ import processing.core.PApplet;
 import ufersa.tcc.simulation.Simulation;
 
 public class Body {
-	public double x, y; // [km]
+	public double x, y; // [m]
 	public double mass; // [kg]
-	public double vx, vy; // [km/s]
-	public double radius = 10; // [km] Tamanho padrão do objeto
+	public double vx, vy; // [m/s]
+	public double radius = 10e3; // [m] Tamanho padrão do objeto
 
 	private PApplet screen;
 	private int[] rgb = { 255, 255, 255 };
@@ -33,9 +33,9 @@ public class Body {
 	 */
 	public Body(PApplet screen, double x, double y, double radius, double mass, double vx, double vy) {
 		this.screen = screen;
-		this.x = x; // [km]
-		this.y = y; // [km]
-		this.radius = radius; // [km]
+		this.x = x; // [m]
+		this.y = y; // [m]
+		this.radius = radius; // [m]
 		this.mass = mass; // [kg]
 		this.vx = vx; // [m/s]
 		this.vy = vy; // [m/s]
@@ -51,8 +51,8 @@ public class Body {
 	}
 
 	public void interact(Body b, double t) {
-		final double deltaX = (b.x - this.x) * 1e3; // [km]->[m]
-		final double deltaY = (b.y - this.y) * 1e3; // [km]->[m]
+		final double deltaX = b.x - this.x; // [m]
+		final double deltaY = b.y - this.y; // [m]
 		final double dist2 = pow(deltaX, 2) + pow(deltaY, 2); // [m^2]
 		final double dist = sqrt(dist2); // [m]
 		final double force = G * b.mass * this.mass / dist2; // [kg] * [m/s^2]
@@ -60,16 +60,18 @@ public class Body {
 		final double accelY = force * deltaY / (dist * this.mass); // [m/s^2]
 		this.vx += accelX * t; // [m/s]
 		this.vy += accelY * t; // [m/s]
-		//this.x += vx * 1e-3 * t; // [m]->[km]
-		//this.y += vy * 1e-3 * t; // [m]->[km]
+		// this.x += vx * t; // [m]
+		// this.y += vy * t; // [m]
 	}
 
 	public void draw() {
 		screen.translate(screen.width / 2, screen.height / 2);
 		screen.fill(rgb[0], rgb[1], rgb[2], 200);
-		screen.ellipse((float) (Simulation.screenScaleX * this.x), (float) (Simulation.screenScaleY * this.y),
-				(float) (this.radius * Simulation.screenObjectScale),
-				(float) (this.radius * Simulation.screenObjectScale));
+		float posx = (float) (Simulation.screenScale * this.x);
+		float posy = (float) (Simulation.screenScale * this.y);
+		float lengthx = (float) (this.radius * Simulation.screenObjectScale);
+		float lengthy = (float) (this.radius * Simulation.screenObjectScale);
+		screen.ellipse(posx, posy, lengthx, lengthy);
 		screen.translate(-screen.width / 2, -screen.height / 2);
 	}
 
@@ -82,13 +84,13 @@ public class Body {
 		int line;
 		List<String> strings = new ArrayList<>();
 		strings.add(this.getName());
-		strings.add(String.format("Position: (%g, %g) [km]", this.x, this.y));
+		strings.add(String.format("Position: (%g, %g) [km]", this.x * 1e-3, this.y * 1e-3));
 		strings.add(String.format("Mass: %g [km]", this.mass));
-		strings.add(String.format("Radius: %g [km]", this.radius));
+		strings.add(String.format("Radius: %g [km]", this.radius * 1e-3));
 		strings.add(String.format("Speed: %g (%.3f, %.3f) [m/s]", this.getSpeed(), this.vx, this.vy));
 		for (Body b : w.getBodies()) {
 			if (!this.equals(b)) {
-				strings.add(String.format("Distance to %s: %g [km] ", b.getName(), this.calcDistance(b)));
+				strings.add(String.format("Distance to %s: %g [km] ", b.getName(), this.calcDistance(b) * 1e-3));
 			}
 		}
 		String t = "";

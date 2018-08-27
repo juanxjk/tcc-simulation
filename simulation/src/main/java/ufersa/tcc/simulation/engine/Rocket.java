@@ -24,8 +24,8 @@ public class Rocket extends Body {
 			this.interact(body, dt);
 		}
 
-		this.x += vx * 1e-3 * dt; // [m]->[km]
-		this.y += vy * 1e-3 * dt; // [m]->[km]
+		this.x += vx * dt; // [m]
+		this.y += vy * dt; // [m]
 
 		this.script.process(this, dt);
 	}
