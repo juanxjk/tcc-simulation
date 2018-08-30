@@ -3,6 +3,8 @@ package ufersa.tcc.plot;
 import java.io.IOException;
 import java.util.List;
 
+import javax.swing.WindowConstants;
+
 import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.BitmapEncoder.BitmapFormat;
 import org.knowm.xchart.SwingWrapper;
@@ -56,7 +58,8 @@ public class Plot2d {
 	public void display() {
 
 		// Mostrar em tela
-		new SwingWrapper(chart).displayChart();
+		SwingWrapper display = new SwingWrapper(chart);
+		display.displayChart().setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 
 	/**
