@@ -1,6 +1,7 @@
 package ufersa.tcc.plot;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.BitmapEncoder.BitmapFormat;
@@ -15,6 +16,13 @@ public class Plot2d {
 	/** Nome do plot */
 	private String name;
 	private XYChart chart;
+
+	/**
+	 * Mostra vários gráficos em layout de matriz.
+	 */
+	public static void displayChartMatrix(List<XYChart> charts) {
+		new SwingWrapper<XYChart>(charts).displayChart();
+	}
 
 	/**
 	 * Construtor principal.
