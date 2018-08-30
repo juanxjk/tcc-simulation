@@ -18,6 +18,12 @@ public class Body {
 	private PApplet screen;
 	private int[] rgb = { 255, 255, 255 };
 	private String bodyName = "Não identificado";
+	public double maxDistance = 0;
+	public double maxDistanceTime;
+	public double maxDistanceVelX;
+	public double maxDistanceVelY;
+	public double maxDistance_Moon_Rocket_VectorX;
+	public double maxDistance_Moon_Rocket_VectorY;
 
 	public final static double G = 6.67408e-11; // m^3 kg^-1 s^-2
 
@@ -88,6 +94,13 @@ public class Body {
 		strings.add(String.format("Mass: %g [km]", this.mass));
 		strings.add(String.format("Radius: %g [km]", this.radius * 1e-3));
 		strings.add(String.format("Speed: %g (%.3f, %.3f) [m/s]", this.getSpeed(), this.vx, this.vy));
+		strings.add(String.format("Max earth's distance: %.3f) [km]", this.maxDistance * 1e-3));
+		strings.add(String.format("Max earth's distance time: %.3f) [s]", this.maxDistanceTime));
+		strings.add(String.format("Max earth's distance vel: (%.3f, %.3f) [m/s]", this.maxDistanceVelX,
+				this.maxDistanceVelY));
+		strings.add(String.format("Max earth's distance Moon-Rocket Vector: (%.3f, %.3f) [km]",
+				this.maxDistance_Moon_Rocket_VectorX * 1e-3, this.maxDistance_Moon_Rocket_VectorY * 1e-3));
+
 		for (Body b : w.getBodies()) {
 			if (!this.equals(b)) {
 				strings.add(String.format("Distance to %s: %g [km] ", b.getName(), this.calcDistance(b) * 1e-3));
