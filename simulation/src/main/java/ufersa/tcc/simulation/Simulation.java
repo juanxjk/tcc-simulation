@@ -112,9 +112,11 @@ public class Simulation extends PApplet {
 		text("Duration time: " + time.toString(), 50, 35);
 		text("dt: " + Time.formatHMSM(time.dt) + " [s]", 50, 50);
 		if (!pause) {
-			spacecraft.simulate(world, time.dt);
-			moon.simulate(time.dt);
-			time.step();
+			for (int i = 0; i < 1e3; i++) {
+				spacecraft.simulate(world, time.dt);
+				moon.simulate(time.dt);
+				time.step();
+			}
 		}
 		world.draw();
 		spacecraft.draw();
