@@ -27,6 +27,14 @@ public class Plot2d {
 				.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 
+	public static double[] doubleArray(List<Double[]> array, int col) {
+		double[] data = new double[array.size()];
+		for (int z = 0; z < array.size(); z++) {
+			data[z] = array.get(z)[col];
+		}
+		return data;
+	}
+
 	/**
 	 * Construtor principal.
 	 */
