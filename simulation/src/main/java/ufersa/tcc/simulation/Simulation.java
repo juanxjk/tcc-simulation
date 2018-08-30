@@ -1,5 +1,7 @@
 package ufersa.tcc.simulation;
 
+import static java.lang.Math.pow;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,16 +21,15 @@ public class Simulation extends PApplet {
 	public void settings() {
 		size(800, 600);
 	}
-	
+
 	public static double screenScale = 7.75e-7; // Escala da posição dos objetos
 	public static double screenObjectScale = 1e-5; // Escala dos objetos
 
 	static Time time;
 
-
 	private boolean pause = false;
 
-	private Body earth;
+	Body earth;
 	private Satellite moon;
 	private Rocket spacecraft;
 	private World world;
@@ -83,8 +84,20 @@ public class Simulation extends PApplet {
 		double deltaV1 = Math.sqrt(Body.G * earth_mass / r1) * (Math.sqrt(2.0 * r2 / (r1 + r2)) - 1.0); // [m/s]
 		double deltaV2 = Math.sqrt(Body.G * earth_mass / r2) * (1.0 - Math.sqrt(2.0 * r1 / (r1 + r2))); // [m/s]
 		double tf = Math.PI * Math.sqrt(Math.pow((r1 + r2) / 2, 3) / (Body.G * earth_mass)); // [s]
-		spacecraft.addStatement(new Statement(0, 600, 0f, 0f, spacecraft_mass*deltaV1/600, 0f));
-		spacecraft.addStatement(new Statement(tf, tf+600, 0f, 0f, spacecraft_mass*deltaV2/600, 0f));
+		double moon_period = 27.322 * 24 * 60 * 60;
+		double spacecraft_period = 1 * 24 * 60 * 60;
+		double duration = 300;
+		double intecept_time = (tf + moon_period / 2) / (moon_period / spacecraft_period - 1);
+		spacecraft.addStatement(new Statement(intecept_time - duration, intecept_time, 0f, 0f,
+				spacecraft_mass * deltaV1 / duration, 0f));
+		// spacecraft.addStatement(new Statement(intecept_time - duration + tf,
+		// intecept_time + tf, 0f, 0f,
+		// spacecraft_mass * deltaV2 / duration, 0f));
+		// spacecraft.addStatement(
+		// new Statement(507166 - duration, 507166, -2.7*spacecraft_mass * deltaV2 /
+		// duration, 0f, 0f, 0f));
+		spacecraft.addStatement(
+				new Statement(507166, 507166 + duration, -0.47 * spacecraft_mass * deltaV2 / duration, 0f, 0f, 0f));
 
 		world = new World();
 		// world.addBody(spacecraft);
