@@ -78,7 +78,13 @@ public class Simulation extends PApplet {
 		spacecraft = new Rocket(new Body(screen, spacecraft_x, spacecraft_y, spacecraft_radius, spacecraft_mass,
 				spacecraft_vx, spacecraft_vy));
 		spacecraft.setName("Foguete");
-		//spacecraft.addStatement(new Statement(74f, 76f, 0f, 0f, 10f, 0f));
+		double r1 = earth.calcDistance(spacecraft);
+		double r2 = earth.calcDistance(moon);
+		double deltaV1 = Math.sqrt(Body.G * earth_mass / r1) * (Math.sqrt(2.0 * r2 / (r1 + r2)) - 1.0); // [m/s]
+		double deltaV2 = Math.sqrt(Body.G * earth_mass / r2) * (1.0 - Math.sqrt(2.0 * r1 / (r1 + r2))); // [m/s]
+		double tf = Math.PI * Math.sqrt(Math.pow((r1 + r2) / 2, 3) / (Body.G * earth_mass)); // [s]
+		spacecraft.addStatement(new Statement(0, 600, 0f, 0f, spacecraft_mass*deltaV1/600, 0f));
+		spacecraft.addStatement(new Statement(tf, tf+600, 0f, 0f, spacecraft_mass*deltaV2/600, 0f));
 
 		world = new World();
 		// world.addBody(spacecraft);
