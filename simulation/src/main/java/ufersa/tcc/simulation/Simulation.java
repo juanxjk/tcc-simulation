@@ -3,9 +3,13 @@ package ufersa.tcc.simulation;
 import static java.lang.Math.pow;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.knowm.xchart.XYChart;
+
 import processing.core.PApplet;
+import ufersa.tcc.plot.Plot2d;
 import ufersa.tcc.simulation.engine.Body;
 import ufersa.tcc.simulation.engine.Rocket;
 import ufersa.tcc.simulation.engine.Satellite;
@@ -105,6 +109,10 @@ public class Simulation extends PApplet {
 		world.addBody(moon);
 	}
 
+	List<Double[]> data_spacecraft_earth_Distance = new ArrayList<Double[]>();
+	List<Double[]> data_spacecraft_moon_Distance = new ArrayList<Double[]>();
+	List<Double[]> data_moon_earth_Distance = new ArrayList<Double[]>();
+
 	// DRAW = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 	public void draw() {
 		background(0);
@@ -126,6 +134,12 @@ public class Simulation extends PApplet {
 				moon.simulate(time.dt);
 				time.step();
 			}
+			data_spacecraft_earth_Distance
+					.add(new Double[] { time.getTotalTime() / (60 * 60 * 24), spacecraft.calcDistance(earth) * 1e-3 });
+			data_spacecraft_moon_Distance
+					.add(new Double[] { time.getTotalTime() / (60 * 60 * 24), spacecraft.calcDistance(moon) * 1e-3 });
+			data_moon_earth_Distance
+					.add(new Double[] { time.getTotalTime() / (60 * 60 * 24), moon.calcDistance(earth) * 1e-3 });
 		}
 		world.draw();
 		spacecraft.draw();
@@ -212,13 +226,40 @@ public class Simulation extends PApplet {
 		if (key == 'p') {
 			this.pause = !this.pause;
 		}
+		if (key == 'n') {
+			double[] xData = Plot2d.doubleArray(data_spacecraft_earth_Distance, 0);
+			double[] yData = Plot2d.doubleArray(data_spacecraft_earth_Distance, 1);
+			XYChart chart1 = new Plot2d("Distância da Foguete-Terra", "Tempo [dias]", xData, "Distância [km]", yData)
+					.getChart();
+
+			xData = Plot2d.doubleArray(data_spacecraft_moon_Distance, 0);
+			yData = Plot2d.doubleArray(data_spacecraft_moon_Distance, 1);
+			XYChart chart2 = new Plot2d("Distância da Foguete-Lua", "Tempo [dias]", xData, "Distância [km]", yData)
+					.getChart();
+
+			xData = Plot2d.doubleArray(data_moon_earth_Distance, 0);
+			yData = Plot2d.doubleArray(data_moon_earth_Distance, 1);
+			XYChart chart3 = new Plot2d("Distância da Lua-Terra", "Tempo [dias]", xData, "Distância [km]", yData)
+					.getChart();
+
+			Plot2d.displayChartMatrix(Arrays.asList(chart1, chart2, chart3));
+
+		}
 
 		if (key == 'h') {
 			showHelpInfo = !showHelpInfo;
 		}
 
-		if (key == 'r')
+		if (key == 'r') {
+			resetPlotData();
 			setup();
+		}
+	}
+
+	private void resetPlotData() {
+		data_spacecraft_earth_Distance = new ArrayList<Double[]>();
+		data_spacecraft_moon_Distance = new ArrayList<Double[]>();
+		data_moon_earth_Distance = new ArrayList<Double[]>();
 	}
 
 }
