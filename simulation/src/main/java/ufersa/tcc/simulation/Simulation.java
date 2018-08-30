@@ -113,6 +113,15 @@ public class Simulation extends PApplet {
 		text("dt: " + Time.formatHMSM(time.dt) + " [s]", 50, 50);
 		if (!pause) {
 			for (int i = 0; i < 1e3; i++) {
+				double value = Math.sqrt(Math.pow(spacecraft.x, 2) + Math.pow(spacecraft.y, 2));
+				if (value > spacecraft.maxDistance) {
+					spacecraft.maxDistance = value;
+					spacecraft.maxDistanceTime = time.getTotalTime();
+					spacecraft.maxDistanceVelX = spacecraft.vx;
+					spacecraft.maxDistanceVelY = spacecraft.vy;
+					spacecraft.maxDistance_Moon_Rocket_VectorX = spacecraft.x - moon.x;
+					spacecraft.maxDistance_Moon_Rocket_VectorY = spacecraft.y - moon.y;
+				}
 				spacecraft.simulate(world, time.dt);
 				moon.simulate(time.dt);
 				time.step();

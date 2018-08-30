@@ -23,7 +23,8 @@ public class Plot2d {
 	 * Mostra vários gráficos em layout de matriz.
 	 */
 	public static void displayChartMatrix(List<XYChart> charts) {
-		new SwingWrapper<XYChart>(charts).displayChart();
+		new SwingWrapper<XYChart>(charts).displayChartMatrix()
+				.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 
 	/**
