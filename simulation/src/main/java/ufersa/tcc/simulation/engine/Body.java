@@ -4,6 +4,7 @@ import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import processing.core.PApplet;
@@ -24,6 +25,10 @@ public class Body {
 	public double maxDistanceVelY;
 	public double maxDistance_Moon_Rocket_VectorX;
 	public double maxDistance_Moon_Rocket_VectorY;
+
+	// Trails
+	LinkedList<PointXY> trail = new LinkedList<PointXY>();
+	int maxTrailLength = 256;
 
 	public final static double G = 6.67408e-11; // m^3 kg^-1 s^-2
 
@@ -77,8 +82,35 @@ public class Body {
 		float posy = (float) (Simulation.screenScale * this.y);
 		float lengthx = (float) (this.radius * Simulation.screenObjectScale);
 		float lengthy = (float) (this.radius * Simulation.screenObjectScale);
+		showTrail(posx, posy);
 		screen.ellipse(posx, posy, lengthx, lengthy);
 		screen.translate(-screen.width / 2, -screen.height / 2);
+	}
+
+	private void showTrail(float x, float y) {
+		screen.stroke(180);
+		trail.addFirst(new PointXY(x, y));
+
+		if (trail.size() >= 2) {
+			PointXY currPoint, lastPoint = trail.get(0);
+			for (int i = 0; i < trail.size(); i++) {
+				currPoint = trail.get(i);
+				screen.line(lastPoint.x, lastPoint.y, currPoint.x, currPoint.y);
+				lastPoint = currPoint;
+			}
+		}
+		while (trail.size() > maxTrailLength)
+			trail.removeLast();
+		screen.stroke(0);
+	}
+
+	private class PointXY {
+		public float x, y;
+
+		public PointXY(float px, float py) {
+			x = px;
+			y = py;
+		}
 	}
 
 	@Override
