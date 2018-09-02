@@ -25,6 +25,22 @@ public class Body {
 	public double maxDistance_Moon_Rocket_VectorX;
 	public double maxDistance_Moon_Rocket_VectorY;
 
+	public double minMoonDistance = Double.MAX_VALUE;
+	public double minMoonDistanceTime;
+	public double minMoonDistanceMoon_PosX;
+	public double minMoonDistanceMoon_PosY;
+	public double minMoonDistancePosX;
+	public double minMoonDistancePosY;
+	public double minMoonDistanceVelX;
+	public double minMoonDistanceVelY;
+
+	public double deltaV2X;
+	public double deltaV2Y;
+	public double minDeltaV2 = Double.MAX_VALUE;
+	public double minDeltaV2X;
+	public double minDeltaV2Y;
+	public double minDeltaV2YTime;
+
 	public final static double G = 6.67408e-11; // m^3 kg^-1 s^-2
 
 	/**

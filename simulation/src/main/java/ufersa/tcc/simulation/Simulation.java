@@ -262,4 +262,58 @@ public class Simulation extends PApplet {
 		data_moon_earth_Distance = new ArrayList<Double[]>();
 	}
 
+	public void updateV2(Body b1, Satellite b, Time time) {
+		updateMinMoonDistance(b1, b, time);
+		// Velocidade órbita circular em torno da lua
+		double vo = Math.sqrt(Body.G * b.mass / b1.calcDistance(b));
+		double lf = b1.calcDistance(b);
+		double lfX = (b1.x - b.x) / lf;
+		double lfY = (b1.y - b.y) / lf;
+		double voX = -vo * lfY;
+		double voY = vo * lfX;
+
+		// Velocidade da lua
+		double moon_r = b.getDistanceFromCenter(); // Raio de órbita do satelite
+		double vlX = -moon_r * b.angular_vel * Math.sin(b.angular_vel * time.getTotalTime());
+		double vlY = moon_r * b.angular_vel * Math.cos(b.angular_vel * time.getTotalTime());
+		double vfX = voX + vlX;
+		double vfY = voY + vlY;
+		b1.deltaV2X = vfX - b1.vx;
+		b1.deltaV2Y = vfY - b1.vy;
+		double deltaV2 = Math.sqrt(b1.deltaV2X * b1.deltaV2X + b1.deltaV2Y * b1.deltaV2Y);
+		if (deltaV2 < b1.minDeltaV2) {
+			b1.minDeltaV2 = deltaV2;
+			b1.minDeltaV2X = b1.deltaV2X;
+			b1.minDeltaV2Y = b1.deltaV2Y;
+			b1.minDeltaV2YTime = time.getTotalTime();
+		}
+	}
+
+	public void updateMaxDistance(Body b1, Body b, Time time) {
+		double value = b1.calcDistance(b);
+		if (value > b1.maxDistance) {
+			b1.maxDistance = value;
+			b1.maxDistanceTime = time.getTotalTime();
+			b1.maxDistanceVelX = b1.vx;
+			b1.maxDistanceVelY = b1.vy;
+			b1.maxDistance_Moon_Rocket_VectorX = b1.x - b1.x;
+			b1.maxDistance_Moon_Rocket_VectorY = b1.y - b1.y;
+		}
+	}
+
+	public void updateMinMoonDistance(Body b1, Body b, Time time) {
+		double value = b1.calcDistance(b);
+		if (value < b1.minMoonDistance) {
+			b1.minMoonDistance = value;
+			b1.minMoonDistanceTime = time.getTotalTime();
+			b1.minMoonDistanceMoon_PosX = b.x;
+			b1.minMoonDistanceMoon_PosY = b.y;
+			b1.minMoonDistancePosX = b1.x;
+			b1.minMoonDistancePosY = b1.y;
+			b1.minMoonDistanceVelX = b1.vx;
+			b1.minMoonDistanceVelY = b1.vy;
+
+		}
+	}
+
 }
