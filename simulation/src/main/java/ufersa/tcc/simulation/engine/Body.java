@@ -147,4 +147,8 @@ public class Body {
 		this.vy *= _percent;
 	}
 
+	public double getDistanceFromCenter() {
+		return sqrt(this.x * this.x + this.y * this.y);
+	}
+
 }

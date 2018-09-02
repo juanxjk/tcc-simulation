@@ -7,9 +7,9 @@ import static java.lang.Math.PI;
 public class Satellite extends Body {
 
 	private Body centerBody;
-	private double radius_distance; // [m]
-	private double angular_vel; // [rad/s]
-	private double theta = 0; // rad
+	public double radius_distance; // [m]
+	public double angular_vel; // [rad/s]
+	public double theta = 0; // rad
 
 	public Satellite(Body centerBody, Body body, double radius_distance, double angular_vel) {
 		super(body);
