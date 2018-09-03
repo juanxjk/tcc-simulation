@@ -29,8 +29,6 @@ public class Simulation extends PApplet {
 
 	static Time time;
 
-	private boolean pause = false;
-
 	Body earth;
 	private Satellite moon;
 	private Rocket spacecraft;
@@ -117,8 +115,6 @@ public class Simulation extends PApplet {
 		text("Total time: " + time.getTotalTime(), 50, 20);
 		text("Duration time: " + time.toString(), 50, 35);
 		text("dt: " + Time.formatHMSM(time.dt) + " [s]", 50, 50);
-		if (!pause) {
-			for (int i = 0; i < 1e3; i++) {
 				double value = Math.sqrt(Math.pow(spacecraft.x, 2) + Math.pow(spacecraft.y, 2));
 				if (value > spacecraft.maxDistance) {
 					spacecraft.maxDistance = value;
@@ -128,6 +124,9 @@ public class Simulation extends PApplet {
 					spacecraft.maxDistance_Moon_Rocket_VectorX = spacecraft.x - moon.x;
 					spacecraft.maxDistance_Moon_Rocket_VectorY = spacecraft.y - moon.y;
 				}
+		text(looping ? "" : "Pausado", 50, 65);
+		if (looping) {
+			for (int i = 0; i < 1e3; i++) {
 				spacecraft.simulate(world, time.dt);
 				moon.simulate(time.dt);
 				time.step();
@@ -222,7 +221,12 @@ public class Simulation extends PApplet {
 		}
 
 		if (key == 'p') {
-			this.pause = !this.pause;
+			if (!looping) {
+				this.loop();
+			} else {
+				this.noLoop();
+				this.draw();
+			}
 		}
 		if (key == 'n') {
 			double[] xData = Plot2d.doubleArray(data_spacecraft_earth_Distance, 0);
