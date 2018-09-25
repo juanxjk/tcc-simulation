@@ -16,12 +16,16 @@ public class Satellite extends Body {
 		this.centerBody = centerBody;
 		this.radius_distance = radius_distance;
 		this.angular_vel = angular_vel;
+
 	}
 
 	public void simulate(double dt) {
 		theta += angular_vel * dt;
 		this.x = centerBody.x + radius_distance * cos(theta);
 		this.y = centerBody.y - radius_distance * sin(theta);
+
+		this.vx = -radius_distance * angular_vel * Math.sin(angular_vel * Simulation.time.getTotalTime());
+		this.vy = -radius_distance * angular_vel * Math.cos(angular_vel * Simulation.time.getTotalTime());
 	}
 
 }

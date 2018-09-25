@@ -49,6 +49,10 @@ public class Body {
 
 	public final static double G = 6.67408e-11; // m^3 kg^-1 s^-2
 
+	public static double calcOrbitalRadiusFrom(double orbitalPeriod, Body b) {
+		return Math.pow(Body.G * b.mass * Math.pow(orbitalPeriod, 2) / (4 * Math.pow(Math.PI, 2)), (1.0 / 3));
+	}
+
 	/**
 	 * @param screen
 	 *            Tela de display.
@@ -181,7 +185,7 @@ public class Body {
 	}
 
 	public double getDistanceFromCenter() {
-		return sqrt(this.x * this.x + this.y * this.y);
+		return sqrt(pow(this.x, 2) + pow(this.y, 2));
 	}
 
 }
