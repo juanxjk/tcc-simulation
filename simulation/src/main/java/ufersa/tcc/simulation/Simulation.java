@@ -41,46 +41,51 @@ public class Simulation extends PApplet {
 		PApplet screen = this;
 
 		// --- TERRA ---
-		double earth_center_x = 0 * 1e3; // [km]->[m] Posição em referência ao centro da Terra
-		double earth_center_y = 0 * 1e3; // [km]->[m] Posição em referência ao centro da Terra
+		double earth_center_x = 0; // [km]->[m] Posição em referência ao centro da Terra
+		double earth_center_y = 0; // [km]->[m] Posição em referência ao centro da Terra
 		double earth_radiusLengh = 6_371 * 1e3; // [km]->[m] Raio da Terra
-		double earth_mass = 5.972e24; // [kg] Massa da Terra
+		double earth_mass = 5.9723e24; // [kg] Massa da Terra
 		double earth_vx = 0; // [m/s] Velocidade tangencial da Terra em X
 		double earth_vy = 0; // [m/s] Velocidade tangencial da Terra em Y
 		earth = new Body(screen, earth_center_x, earth_center_y, earth_radiusLengh, earth_mass, earth_vx, earth_vy);
 		earth.setName("Terra");
 
 		// --- LUA ---
-		double moon_distanceToEarth = 384_000 * 1e3; // [km]->[m] Distância da Lua em referência à Terra
-		double moon_x = earth.x + earth_radiusLengh + moon_distanceToEarth; // [m] Posição em referência ao centro da
-																			// Terra
-		double moon_y = earth.y; // [m] Posição em referência ao centro da Terra
-		double moon_radiusSize = 1_737 * 1e3; // [km]->[m] Raio da Lua
-		double moon_mass = 7.349e22; // [kg] Massa da Lua
+		double moon_OrbitalPeriod = 27.3217 * 24 * 60 * 60; // [s]
+		// [km]->[m] Distância da Lua em referência à Terra
+		double moon_distanceToEarth = Body.calcOrbitalRadiusFrom(moon_OrbitalPeriod, earth); // [m]
+		double moon_x = earth.x + moon_distanceToEarth, moon_y = earth.y; // [m] Posição inicial
+		double moon_radiusSize = 1_736 * 1e3; // [km]->[m] Raio da Lua
+		double moon_mass = 7.346e22; // [kg] Massa da Lua
 		double moon_vx = 0; // [m/s] Velocidade tangencial da Lua em X
 		double moon_vy = Math.sqrt((Body.G * earth_mass) / moon_distanceToEarth); // [m/s] Velocidade tangencial da Lua
 																					// em Y
-		double angular_speed = 2 * PI / (27.322 * 24 * 60 * 60); // [rad/s] 27,3 horas período
+		double angular_speed = 2 * PI / moon_OrbitalPeriod; // [rad/s] 27,3 horas período
 
 		moon = new Satellite(earth, new Body(screen, moon_x, moon_y, moon_radiusSize, moon_mass, moon_vx, moon_vy),
 				moon_distanceToEarth, angular_speed);
 		moon.setName("Lua");
 
 		// --- FOGUETE ---
-		//double spacecraft_radiusDistance = 35786 * 1e3; // [km]->[m] Orbita geoestacionária
-		double spacecraft_x = 42_164 * 1e3;/*earth_center_x + earth_radiusLengh + spacecraft_radiusDistance; // [km]->[m] Distância da
-																								// Saturn V em
-																								// referência à Terra*/
+		// double spacecraft_radiusDistance = 35786 * 1e3; // [km]->[m] Orbita
+		// geoestacionária
+		double spacecraft_OrbitalPeriod = 24 * 60 * 60;
+		double spacecraft_x = Body.calcOrbitalRadiusFrom(spacecraft_OrbitalPeriod,
+				earth); /*
+						 * earth_center_x + earth_radiusLengh + spacecraft_radiusDistance; // [km]->[m]
+						 * Distância da // Saturn V em // referência à Terra
+						 */
 		double spacecraft_y = earth_center_y; // [m]
 		double spacecraft_radius = 1000 * 1e3; // [km]->[m] Tamanho do foguete (ignorando o escalonamento de tela)
-		double spacecraft_mass = 2.97e6; // [kg] Massa da Saturn V
+		double spacecraft_mass = 2.97e5; // [kg] Massa da Saturn V
 		double spacecraft_vx = 0; // [m/s] Velocidade tangencial em X
-		double spacecraft_vy = -3074.6; // [m/s] Velocidade tangencial em Y
+		// double spacecraft_vy = -3074.6; // [m/s] Velocidade tangencial em Y
+		double spacecraft_vy = -Math.sqrt(Body.G * earth_mass / spacecraft_x); // [m/s] Velocidade tangencial em Y
 		spacecraft = new Rocket(new Body(screen, spacecraft_x, spacecraft_y, spacecraft_radius, spacecraft_mass,
 				spacecraft_vx, spacecraft_vy));
 		spacecraft.setName("Foguete");
 		double r1 = earth.calcDistance(spacecraft);
-		double r2 = earth.calcDistance(moon);
+		double r2 = moon.radius_distance;
 		double deltaV1 = Math.sqrt(Body.G * earth_mass / r1) * (Math.sqrt(2.0 * r2 / (r1 + r2)) - 1.0); // [m/s]
 		double deltaV2 = Math.sqrt(Body.G * earth_mass / r2) * (1.0 - Math.sqrt(2.0 * r1 / (r1 + r2))); // [m/s]
 		double tf = Math.PI * Math.sqrt(Math.pow((r1 + r2) / 2, 3) / (Body.G * earth_mass)); // [s]
