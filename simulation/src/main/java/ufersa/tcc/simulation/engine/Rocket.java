@@ -2,6 +2,7 @@ package ufersa.tcc.simulation.engine;
 
 import ufersa.tcc.simulation.Script;
 import ufersa.tcc.simulation.Statement;
+import ufersa.tcc.simulation.engine.time.Time;
 
 public class Rocket extends Body {
 	private Script script;
@@ -29,9 +30,5 @@ public class Rocket extends Body {
 
 		this.script.process(this, dt);
 	}
-
-	
-
-	
 
 }

@@ -2,6 +2,9 @@ package ufersa.tcc.simulation.engine;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
+
+import ufersa.tcc.simulation.Simulation;
+
 import static java.lang.Math.PI;
 
 public class Satellite extends Body {

@@ -9,6 +9,7 @@ import java.util.List;
 
 import processing.core.PApplet;
 import ufersa.tcc.simulation.Simulation;
+import ufersa.tcc.simulation.engine.time.Time;
 
 public class Body {
 	public double x, y; // [m]
@@ -17,7 +18,7 @@ public class Body {
 	public double radius = 10e3; // [m] Tamanho padrão do objeto
 
 	private PApplet screen;
-	private int[] rgb = { 255, 255, 255 };
+	private int[] rgb = { 125, 125, 125 };
 	private String bodyName = "Não identificado";
 	public double maxDistance = 0;
 	public double maxDistanceTime;
@@ -44,8 +45,7 @@ public class Body {
 
 	// Trails
 	LinkedList<PointXY> trail = new LinkedList<PointXY>();
-	int maxTrailLength = 256;
-
+	int maxTrailLength = 3000;
 
 	public final static double G = 6.67408e-11; // m^3 kg^-1 s^-2
 
@@ -103,25 +103,35 @@ public class Body {
 		float posy = (float) (Simulation.screenScale * this.y);
 		float lengthx = (float) (this.radius * Simulation.screenObjectScale);
 		float lengthy = (float) (this.radius * Simulation.screenObjectScale);
+		this.updateTrail(this.x, this.y);
 		showTrail(posx, posy);
 		screen.ellipse(posx, posy, lengthx, lengthy);
 		screen.translate(-screen.width / 2, -screen.height / 2);
 	}
 
-	private void showTrail(float x, float y) {
-		screen.stroke(180);
-		trail.addFirst(new PointXY(x, y));
+	protected void updateTrail(double x, double y) {
+		PointXY newPoint = new PointXY((float) x, (float) y);
+		if (screen.isLooping())
+			trail.addFirst(newPoint);
+		while (trail.size() > maxTrailLength)
+			trail.removeLast();
+	}
 
+	private void showTrail(float x, float y) {
+		screen.stroke(75);
 		if (trail.size() >= 2) {
 			PointXY currPoint, lastPoint = trail.get(0);
 			for (int i = 0; i < trail.size(); i++) {
 				currPoint = trail.get(i);
-				screen.line(lastPoint.x, lastPoint.y, currPoint.x, currPoint.y);
+				float lastX = (float) (lastPoint.x * Simulation.screenScale);
+				float lastY = (float) (lastPoint.y * Simulation.screenScale);
+				float currX = (float) (currPoint.x * Simulation.screenScale);
+				float currY = (float) (currPoint.y * Simulation.screenScale);
+				screen.line(lastX, lastY, currX, currY);
 				lastPoint = currPoint;
 			}
 		}
-		while (trail.size() > maxTrailLength)
-			trail.removeLast();
+
 		screen.stroke(0);
 	}
 
@@ -131,6 +141,18 @@ public class Body {
 		public PointXY(float px, float py) {
 			x = px;
 			y = py;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof PointXY) {
+				if (((PointXY) obj).x == this.x && ((PointXY) obj).y == this.y)
+					return true;
+				else
+					return false;
+			} else {
+				return false;
+			}
 		}
 	}
 
@@ -153,6 +175,19 @@ public class Body {
 				this.maxDistanceVelY));
 		strings.add(String.format("Max earth's distance Moon-Rocket Vector: (%.3f, %.3f) [km]",
 				this.maxDistance_Moon_Rocket_VectorX * 1e-3, this.maxDistance_Moon_Rocket_VectorY * 1e-3));
+
+		strings.add(String.format("Min Moon's distance: %.3f) [km]", this.minMoonDistance * 1e-3));
+		strings.add(String.format("Min Moon's distance time: %.3f) [s]", this.minMoonDistanceTime));
+		strings.add(String.format("Min Moon's distance - Moon Pos : (%.3f, %.3f) [m]", this.minMoonDistanceMoon_PosX,
+				this.minMoonDistanceMoon_PosY));
+		strings.add(String.format("Min Moon's distance pos: (%.3f, %.3f) [m]", this.minMoonDistancePosX,
+				this.minMoonDistancePosY));
+		strings.add(String.format("Min Moon's distance vel: (%.3f, %.3f) [m/s]", this.minMoonDistanceVelX,
+				this.minMoonDistanceVelY));
+		strings.add(String.format("Delta V2: (%.3f, %.3f) [m/s]", this.deltaV2X, this.deltaV2Y));
+		strings.add(String.format("Min Delta V2: %.3f (%.3f, %.3f) [m/s]", this.minDeltaV2, this.minDeltaV2X,
+				this.minDeltaV2Y));
+		strings.add(String.format("Min Delta V2 Time: %.3f [s]", this.minDeltaV2YTime));
 
 		for (Body b : w.getBodies()) {
 			if (!this.equals(b)) {
